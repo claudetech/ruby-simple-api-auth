@@ -14,15 +14,15 @@ module SimpleApiAuth
         SimpleApiAuth.config.request_timeout * 60
       end
 
-      def check_data(headers, http_verb)
+      def check_data(request)
         required_headers.each do |k, _|
-          return false unless headers.key?(k)
+          return false unless request.headers.key?(k)
         end
-        SimpleApiAuth.config.allowed_methods.include?(http_verb)
+        SimpleApiAuth.config.allowed_methods.include?(request.http_verb)
       end
 
-      def too_old?(headers)
-        request_time = Time.parse(headers[:x_saa_auth_time]) rescue nil
+      def too_old?(request)
+        request_time = request.time
         return false if request_time.nil?
         Time.now - request_time > request_timeout
       end
@@ -32,8 +32,7 @@ module SimpleApiAuth
       end
 
       def sha1_hmac(key, message)
-        digest = OpenSSL::Digest.new('sha1')
-        OpenSSL::HMAC.digest(digest, key, message)
+        SimpleApiAuth::Hasher::SHA1.new.hmac(key, message)
       end
     end
   end

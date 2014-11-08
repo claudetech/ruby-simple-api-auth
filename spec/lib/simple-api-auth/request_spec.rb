@@ -2,8 +2,6 @@ describe SimpleApiAuth do
   describe SimpleApiAuth::Request do
     include SimpleApiAuth::Helpers::Request
 
-    let(:rails_request) { SpecHelpers::Requests::RailsRequest.new(make_dummy_headers, 'GET') }
-
     def check_request(request)
       expect(request.headers).to eq(normalize_headers(make_dummy_headers))
       expect(request.http_verb).to eq(:get)
@@ -21,7 +19,7 @@ describe SimpleApiAuth do
       context 'with third party requests' do
         requests.each do |name, request|
           before(:each) { request.configure }
-          let(:dummy_request) { request.new(make_dummy_headers, 'GET') }
+          let(:dummy_request) { request.new(headers: make_dummy_headers, method: 'GET') }
 
           it "should create normalized request from #{name}" do
             normalized_request = SimpleApiAuth::Request.create(dummy_request)

@@ -15,5 +15,14 @@ module SpecHelpers
         config.signer = signer
       end
     end
+
+    def rails_request
+      SpecHelpers::Requests::RailsRequest.new(
+        headers: make_dummy_headers,
+        method: 'GET',
+        path: '/foobar',
+        query_string: 'foo=bar&baz=qux'
+      )
+    end
   end
 end

@@ -2,10 +2,20 @@ module SimpleApiAuth
   class Request
     include SimpleApiAuth::Helpers::Request
 
-    attr_accessor :headers, :http_verb
+    attr_accessor :headers, :http_verb, :query_string, :uri, :body
+
     def initialize(request)
-      self.headers = normalize_headers(request.send(SimpleApiAuth.config.headers_name))
-      self.http_verb = normalize(request.send(SimpleApiAuth.config.http_verb_name))
+      SimpleApiAuth.config.request_keys.each do |k, v|
+        send("#{k}=", request.send(v))
+      end
+      self.headers = normalize_headers(headers)
+      self.http_verb = normalize(http_verb)
+    end
+
+    def time
+      Time.parse(headers[:x_saa_auth_time])
+    rescue ArgumentError
+      nil
     end
 
     def self.create(request)

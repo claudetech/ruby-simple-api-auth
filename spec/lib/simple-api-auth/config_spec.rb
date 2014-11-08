@@ -3,13 +3,13 @@ describe SimpleApiAuth do
     let(:config) { SimpleApiAuth::Config.new }
 
     it 'should have default values' do
-      expect(config.headers_name).to eq(:headers)
-      expect(config.http_verb_name).to eq(:method)
+      expect(config.request_keys[:headers]).to eq(:headers)
+      expect(config.request_keys[:http_verb]).to eq(:method)
     end
 
     it 'should be mutable' do
-      config.headers_name = :env
-      expect(config.headers_name).to eq(:env)
+      config.request_keys[:headers] = :env
+      expect(config.request_keys[:headers]).to eq(:env)
     end
   end
 end

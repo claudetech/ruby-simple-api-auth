@@ -15,7 +15,7 @@ describe SimpleApiAuth do
     requests.each do |name, request|
       context "with #{name}" do
         before(:each) { request.configure  }
-        let(:dummy_request) { request.new(dummy_headers, 'GET') }
+        let(:dummy_request) { request.new(headers: dummy_headers, method: 'GET') }
 
         describe '#valid_signature?' do
           it 'should fail on missing header' do

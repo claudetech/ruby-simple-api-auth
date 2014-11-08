@@ -4,6 +4,7 @@ describe SimpleApiAuth do
     include SimpleApiAuth::Helpers::Auth
 
     let(:headers) { normalize_headers(make_dummy_headers) }
+    let(:request) { SimpleApiAuth::Request.create(rails_request) }
 
     describe '#extract_signature' do
       it 'should return signature when present' do
@@ -18,30 +19,33 @@ describe SimpleApiAuth do
 
     describe '#check_data' do
       it 'should return true when headers are present and http verb is valid' do
-        expect(check_data(headers, :get)).to be_truthy
-        expect(check_data(headers, :post)).to be_truthy
+        expect(check_data(request)).to be_truthy
+        request.http_verb = :post
+        expect(check_data(request)).to be_truthy
       end
 
       it 'should fail when http verb is not valid' do
-        expect(check_data(headers, nil)).to be_falsy
-        expect(check_data(headers, :forbidden_verb)).to be_falsy
+        request.http_verb = nil
+        expect(check_data(request)).to be_falsy
+        request.http_verb = :forbidden_verb
+        expect(check_data(request)).to be_falsy
       end
 
       it 'should fail when header is missing' do
-        headers.delete :authorization
-        expect(check_data(headers, :get)).to be_falsy
+        request.headers.delete :authorization
+        expect(check_data(request)).to be_falsy
       end
     end
 
     describe '#too_old?' do
       it 'should allow recent enough requests' do
         allow(Time).to receive(:now) { Time.new(2014, 11, 18, 0, 3) }
-        expect(too_old?(headers)).to be_falsy
+        expect(too_old?(request)).to be_falsy
       end
 
       it 'should reject old requests' do
         allow(Time).to receive(:now) { Time.new(2014, 11, 18, 0, 6) }
-        expect(too_old?(headers)).to be_truthy
+        expect(too_old?(request)).to be_truthy
       end
     end
 

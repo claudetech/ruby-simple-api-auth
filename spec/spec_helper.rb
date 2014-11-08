@@ -15,3 +15,10 @@ RSpec.configure do |config|
     SimpleApiAuth.config.reset!
   end
 end
+
+class String
+  def unindent
+    first_line_spaces = self[/\A\s*/]
+    gsub(/^#{first_line_spaces}/, '')
+  end
+end

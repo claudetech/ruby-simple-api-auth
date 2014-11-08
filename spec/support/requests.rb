@@ -1,26 +1,42 @@
 module SpecHelpers
   module Requests
-    class RailsRequest
-      attr_accessor :headers, :method
-      def initialize(headers, method)
-        self.headers = headers
-        self.method = method
+    class BaseRequest
+      DEFAULTS = {
+        path: '/',
+        query_string: '',
+        body: StringIO.new('')
+      }
+
+      attr_accessor :path, :query_string, :body
+
+      def initialize(options = {})
+        options = DEFAULTS.merge(options)
+        options.each do |k, v|
+          send("#{k}=", v)
+        end
       end
+
       def self.configure
       end
     end
 
-    class SinatraRequest
+    class RailsRequest < BaseRequest
+      attr_accessor :headers, :method
+    end
+
+    class SinatraRequest < BaseRequest
       attr_accessor :env, :request_method
-      def initialize(env, request_method)
-        self.env = env
-        self.request_method = request_method
+
+      def initialize(options = {})
+        options[:env] = options.delete :headers
+        options[:request_method] = options.delete :method
+        super
       end
 
       def self.configure
         ::SimpleApiAuth.configure do |config|
-          config.headers_name = :env
-          config.http_verb_name = :request_method
+          config.request_keys[:headers] = :env
+          config.request_keys[:http_verb] = :request_method
         end
       end
     end

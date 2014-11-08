@@ -1,9 +1,9 @@
 describe SimpleApiAuth do
   it 'should be configurable' do
-    expect(SimpleApiAuth.config.headers_name).to eq(:headers)
+    expect(SimpleApiAuth.config.request_keys[:headers]).to eq(:headers)
     SimpleApiAuth.configure do |config|
-      config.headers_name = :env
+      config.request_keys[:headers] = :env
     end
-    expect(SimpleApiAuth.config.headers_name).to eq(:env)
+    expect(SimpleApiAuth.config.request_keys[:headers]).to eq(:env)
   end
 end

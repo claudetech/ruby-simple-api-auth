@@ -1,7 +1,10 @@
-helpers = Dir[File.expand_path('simple-api-auth/helpers/*.rb', File.dirname(__FILE__))]
-files   = Dir[File.expand_path('simple-api-auth/*.rb', File.dirname(__FILE__))]
-(helpers + files).each do |m|
-  require m
+require 'open-uri'
+
+['helpers/', '', 'hashers/'].each do |path|
+  files = Dir[File.expand_path("simple-api-auth/#{path}*.rb", File.dirname(__FILE__))]
+  files.each do |m|
+    require m
+  end
 end
 
 module SimpleApiAuth
