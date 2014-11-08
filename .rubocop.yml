@@ -1,5 +1,7 @@
 Documentation:
   Enabled: false
+Style/FileName:
+  Enabled: false
 
 Metrics/LineLength:
   Max: 100

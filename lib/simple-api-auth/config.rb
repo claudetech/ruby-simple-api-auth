@@ -1,6 +1,6 @@
 module SimpleApiAuth
   class Config
-    attr_accessor :headers_name, :http_verb_name
+    attr_accessor :headers_name, :http_verb_name, :allowed_methods
 
     def initialize
       self.headers_name = :headers

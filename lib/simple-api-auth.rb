@@ -1,5 +1,6 @@
-%w{config version auth}.each do |m|
-  require File.join(File.dirname(__FILE__), 'simple-api-auth', m)
+glob = File.expand_path('simple-api-auth/**', File.dirname(__FILE__))
+Dir[glob].each do |m|
+  require File.expand_path(m, File.dirname(__FILE__))
 end
 
 module SimpleApiAuth
