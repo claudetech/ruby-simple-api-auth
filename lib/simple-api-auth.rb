@@ -1,6 +1,7 @@
-glob = File.expand_path('simple-api-auth/**', File.dirname(__FILE__))
-Dir[glob].each do |m|
-  require File.expand_path(m, File.dirname(__FILE__))
+helpers = Dir[File.expand_path('simple-api-auth/helpers/*.rb', File.dirname(__FILE__))]
+files   = Dir[File.expand_path('simple-api-auth/*.rb', File.dirname(__FILE__))]
+(helpers + files).each do |m|
+  require m
 end
 
 module SimpleApiAuth

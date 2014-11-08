@@ -1,6 +1,6 @@
 module SimpleApiAuth
   class Authenticator
-    include ::SimpleApiAuth::RequestHelpers
+    include ::SimpleApiAuth::Helpers::Request
 
     attr_accessor :request, :headers, :http_verb, :signer
 
@@ -12,7 +12,7 @@ module SimpleApiAuth
     end
 
     def authenticate
-      return false if !check_data(headers) || too_old?(headers)
+      return false if !check_data(headers, http_verb) || too_old?(headers)
       signed_request = signer.sign(request, @secret_key)
       secure_equals?(signed_request, user_signature, @secret_key)
     end
@@ -25,7 +25,7 @@ module SimpleApiAuth
     end
 
     def user_signature
-      get_signature(headers)
+      extract_signature(headers)
     end
   end
 
