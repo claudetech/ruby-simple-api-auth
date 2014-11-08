@@ -1,6 +1,6 @@
 module SimpleApiAuth
   class Authenticator
-    include RequestHelpers
+    include ::SimpleApiAuth::RequestHelpers
 
     attr_accessor :request, :headers, :http_verb, :signer
 
