@@ -6,6 +6,8 @@ module SpecHelpers
         self.headers = headers
         self.method = method
       end
+      def self.configure
+      end
     end
 
     class SinatraRequest
@@ -13,6 +15,13 @@ module SpecHelpers
       def initialize(env, request_method)
         self.env = env
         self.request_method = request_method
+      end
+
+      def self.configure
+        ::SimpleApiAuth.configure do |config|
+          config.headers_name = :env
+          config.http_verb_name = :request_method
+        end
       end
     end
 
@@ -22,6 +31,14 @@ module SpecHelpers
         'X-Saa-Auth-Time' => Time.new(2014, 11, 18).iso8601,
         'X-Saa-Key' => 'user_personal_key'
       }
+    end
+
+    def setup_dummy_signer
+      signer = double
+      allow(signer).to receive(:sign) { 'dummy_signature' }
+      SimpleApiAuth.configure do |config|
+        config.signer = signer
+      end
     end
   end
 end

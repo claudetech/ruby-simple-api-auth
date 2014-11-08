@@ -11,7 +11,7 @@ module SimpleApiAuth
       init_data
     end
 
-    def authenticate
+    def valid_signature?
       return false if !check_data(headers, http_verb) || too_old?(headers)
       signed_request = signer.sign(request, @secret_key)
       secure_equals?(signed_request, user_signature, @secret_key)
@@ -29,8 +29,8 @@ module SimpleApiAuth
     end
   end
 
-  def self.authenticate(request, secret_key)
+  def self.valid_signature?(request, secret_key)
     authenticator = Authenticator.new(request, secret_key)
-    authenticator.authenticate
+    authenticator.valid_signature?
   end
 end

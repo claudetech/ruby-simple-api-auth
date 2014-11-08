@@ -4,6 +4,10 @@ module SimpleApiAuth
     attr_accessor :signer, :request_timeout, :required_headers
 
     def initialize
+      reset!
+    end
+
+    def reset!
       self.headers_name = :headers
       self.http_verb_name = :method
       self.allowed_methods = [:get, :post, :put, :patch, :delete]
