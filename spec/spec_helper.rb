@@ -3,6 +3,12 @@ require 'codeclimate-test-reporter'
 Coveralls.wear!
 CodeClimate::TestReporter.start
 
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  Coveralls::SimpleCov::Formatter,
+  SimpleCov::Formatter::HTMLFormatter,
+  CodeClimate::TestReporter::Formatter
+]
+
 $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
 
 require 'simple-api-auth'
