@@ -15,13 +15,5 @@ module SpecHelpers
         self.request_method = request_method
       end
     end
-
-    class Resource
-      attr_accessor :api_key, :api_secret_token
-      def initialize(api_key, api_secret_token)
-        self.api_key = api_key
-        self.api_secret_token = api_secret_token
-      end
-    end
   end
 end
