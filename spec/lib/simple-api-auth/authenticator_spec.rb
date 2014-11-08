@@ -6,10 +6,6 @@ describe SimpleApiAuth do
 
     let(:authenticator) { SimpleApiAuth::Authenticator.new(dummy_request, mock_secret_key) }
 
-    before(:each) do
-      allow(Time).to receive(:now) { Time.new(2014, 11, 18, 0, 3) }
-    end
-
     requests.each do |name, request|
       context "with #{name}" do
         before(:each) do
@@ -25,7 +21,7 @@ describe SimpleApiAuth do
           end
 
           it 'should fail on outdated request' do
-            allow(Time).to receive(:now) { Time.new(2014, 11, 18, 0, 6) }
+            dummy_headers[:x_saa_auth_time] = outdated_time.iso8601
             expect(authenticator.valid_signature?).to be_falsy
           end
 

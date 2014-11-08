@@ -24,7 +24,8 @@ module SimpleApiAuth
       def too_old?(request)
         request_time = request.time
         return false if request_time.nil?
-        Time.now - request_time > request_timeout
+        difference = Time.now - request_time
+        difference < 0 || difference > request_timeout
       end
 
       def secure_equals?(m1, m2, key)

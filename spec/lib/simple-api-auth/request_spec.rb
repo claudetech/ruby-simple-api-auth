@@ -37,7 +37,7 @@ describe SimpleApiAuth do
 
     describe '#time' do
       it 'should return request time' do
-        expect(base_request.time).to eq(now)
+        expect(base_request.time).to eq(request_time)
       end
 
       it 'should return nil on wrong time' do

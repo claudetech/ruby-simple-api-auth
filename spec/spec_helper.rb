@@ -13,7 +13,9 @@ Dir[support_glob].each { |f| require f }
 RSpec.configure do |config|
   config.include SpecHelpers::Dummy
   config.extend SpecHelpers::Requests
+
   config.before(:each) do
+    allow(Time).to receive(:now) { Time.new(2014, 11, 8, 0, 7) }
     SimpleApiAuth.config.reset!
     SimpleApiAuth.config.hasher = SpecHelpers::Auth::DummyHasher
   end

@@ -9,10 +9,10 @@ module SimpleApiAuth
     def sign(request, secret_key)
       date = request.time.strftime('%Y%m%d')
       hashed_date = hasher.hmac('ssa' + secret_key, date)
-      SimpleApiAuth.log(Logger::DEBUG, "Hashed date: #{hashed_date}")
+      SimpleApiAuth.log(Logger::DEBUG, "Hashed date(hex): #{Digest.hexencode(hashed_date)}")
 
       signing_key = hasher.hmac(hashed_date, 'ssa_request')
-      SimpleApiAuth.log(Logger::DEBUG, "Signing key: #{signing_key}")
+      SimpleApiAuth.log(Logger::DEBUG, "Signing key(hex): #{Digest.hexencode(signing_key)}")
 
       string_to_sign = make_string_to_sign(request)
       SimpleApiAuth.log(Logger::DEBUG, "String to sign: #{string_to_sign}")
@@ -35,10 +35,10 @@ module SimpleApiAuth
         request.http_verb,
         URI.encode(request.uri),
         URI.encode(request.query_string),
-        Digest.hexencode(request.body.read)
+        Digest.hexencode(hasher.hash(request.body.read))
       ].join("\n")
       SimpleApiAuth.log(Logger::DEBUG, "Canonical request string: #{canonical_request_string}")
-      hasher.hash(canonical_request_string)
+      Digest.hexencode(hasher.hash(canonical_request_string))
     end
   end
 end

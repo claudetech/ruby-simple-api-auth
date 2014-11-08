@@ -37,6 +37,28 @@ describe SimpleApiAuth do
 
     context 'with real world example' do
       before(:each) do
+        SimpleApiAuth.config.hasher = SimpleApiAuth::Hasher::SHA1
+      end
+      let(:request) do
+        SimpleApiAuth::Request.new(
+          http_verb: 'GET',
+          uri: '/foo/bar',
+          query_string: 'foo=bar&bar=qux',
+          body: StringIO.new('somerandombody'),
+          headers: {
+            authorization: 'Signature: d30b01895f4660957e22ddf8ea2b48c6199f9008',
+            x_saa_auth_time: request_time.iso8601,
+            x_saa_key: 'wedontreallycarehere'
+          }
+        )
+      end
+
+      it 'should succeed with correct key' do
+        expect(SimpleApiAuth.valid_signature?(request, mock_secret_key)).to be_truthy
+      end
+
+      it 'should fail with wrong key' do
+        expect(SimpleApiAuth.valid_signature?(request, 'somerandomkey')).to be_falsy
       end
     end
   end

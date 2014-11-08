@@ -11,8 +11,13 @@ describe SimpleApiAuth do
 
       it 'should encode payload' do
         request.body = StringIO.new('abc')
-        expected = mock_hashed_request + '616263'
-        expect(signer.make_hashed_request(request)).to eq(expected)
+        expected = <<-EOF.unindent[0..-2]
+          hashed:get
+          /foobar
+          foo=bar&baz=qux
+          #{Digest.hexencode('hashed:abc')}
+        EOF
+        expect(signer.make_hashed_request(request)).to eq(Digest.hexencode(expected))
       end
     end
 

@@ -1,7 +1,11 @@
 module SpecHelpers
   module Dummy
-    def now
-      Time.new(2014, 11, 18)
+    def request_time
+      Time.new(2014, 11, 8, 0, 6)
+    end
+
+    def outdated_time
+      Time.new(2014, 11, 8, 0, 1)
     end
 
     def mock_secret_key
@@ -11,19 +15,20 @@ module SpecHelpers
     def mock_headers
       {
         'Authorization' => 'Signature: dummy_signature',
-        'X-Saa-Auth-Time' => now.iso8601,
+        'X-Saa-Auth-Time' => request_time.iso8601,
         'X-Saa-Key' => 'user_personal_key'
       }
     end
 
     def mock_hashed_request
-      <<-EOF.unindent[0..-2]
-        hashed
-        get
-        /foobar
-        foo=bar&baz=qux
-
-      EOF
+      Digest.hexencode(
+        <<-EOF.unindent[0..-2]
+          hashed:get
+          /foobar
+          foo=bar&baz=qux
+          #{Digest.hexencode('hashed:')}
+        EOF
+      )
     end
 
     def mock_string_to_sign
@@ -32,7 +37,7 @@ module SpecHelpers
 
     def mock_signature
       date = mock_request.time.strftime('%Y%m%d')
-      Digest.hexencode("ssa#{mock_secret_key}\n#{date}\nssa_request\n#{mock_string_to_sign}")
+      Digest.hexencode("ssa#{mock_secret_key}:#{date}:ssa_request:#{mock_string_to_sign}")
     end
 
     def setup_dummy_signer

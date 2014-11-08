@@ -39,12 +39,11 @@ describe SimpleApiAuth do
 
     describe '#too_old?' do
       it 'should allow recent enough requests' do
-        allow(Time).to receive(:now) { Time.new(2014, 11, 18, 0, 3) }
         expect(too_old?(request)).to be_falsy
       end
 
       it 'should reject old requests' do
-        allow(Time).to receive(:now) { Time.new(2014, 11, 18, 0, 6) }
+        request.headers[:x_saa_auth_time] = Time.new(2014, 11, 8).iso8601
         expect(too_old?(request)).to be_truthy
       end
     end
