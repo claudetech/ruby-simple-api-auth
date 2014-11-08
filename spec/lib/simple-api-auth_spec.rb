@@ -46,7 +46,7 @@ describe SimpleApiAuth do
           query_string: 'foo=bar&bar=qux',
           body: StringIO.new('somerandombody'),
           headers: {
-            authorization: 'Signature: d30b01895f4660957e22ddf8ea2b48c6199f9008',
+            authorization: 'Signature: 7c171d095fd65b7078afd13a6b3bd4ecfe596552',
             x_saa_auth_time: request_time.iso8601,
             x_saa_key: 'wedontreallycarehere'
           }

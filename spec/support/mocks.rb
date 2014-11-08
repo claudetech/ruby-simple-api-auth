@@ -1,11 +1,11 @@
 module SpecHelpers
   module Dummy
     def request_time
-      Time.new(2014, 11, 8, 0, 6)
+      Time.utc(2014, 11, 8, 0, 6)
     end
 
     def outdated_time
-      Time.new(2014, 11, 8, 0, 1)
+      Time.utc(2014, 11, 8, 0, 1)
     end
 
     def mock_secret_key
