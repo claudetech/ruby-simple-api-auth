@@ -10,6 +10,7 @@ Dir[support_glob].each { |f| require f }
 
 RSpec.configure do |config|
   config.include SpecHelpers::Dummy
+  config.extend SpecHelpers::Requests
   config.before(:each) do
     SimpleApiAuth.config.reset!
   end
