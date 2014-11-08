@@ -1,6 +1,6 @@
 require 'open-uri'
 
-['helpers/', '', 'hashers/'].each do |path|
+['extensions/', 'helpers/', '', 'hashers/'].each do |path|
   files = Dir[File.expand_path("simple-api-auth/#{path}*.rb", File.dirname(__FILE__))]
   files.each do |m|
     require m

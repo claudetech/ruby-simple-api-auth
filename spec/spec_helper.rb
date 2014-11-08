@@ -15,6 +15,7 @@ RSpec.configure do |config|
   config.extend SpecHelpers::Requests
   config.before(:each) do
     SimpleApiAuth.config.reset!
+    SimpleApiAuth.config.hasher = SpecHelpers::Auth::DummyHasher
   end
 end
 

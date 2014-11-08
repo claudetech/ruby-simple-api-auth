@@ -2,19 +2,20 @@ describe SimpleApiAuth do
   describe SimpleApiAuth::Authenticator do
     include SimpleApiAuth::Helpers::Request
 
-    let(:dummy_headers) { make_dummy_headers }
+    let(:dummy_headers) { mock_headers }
 
-    let(:secret_key) { 'ultra_secret_key' }
-    let(:authenticator) { SimpleApiAuth::Authenticator.new(dummy_request, secret_key) }
+    let(:authenticator) { SimpleApiAuth::Authenticator.new(dummy_request, mock_secret_key) }
 
     before(:each) do
       allow(Time).to receive(:now) { Time.new(2014, 11, 18, 0, 3) }
-      setup_dummy_signer
     end
 
     requests.each do |name, request|
       context "with #{name}" do
-        before(:each) { request.configure  }
+        before(:each) do
+          request.configure
+          setup_dummy_signer
+        end
         let(:dummy_request) { request.new(headers: dummy_headers, method: 'GET') }
 
         describe '#valid_signature?' do

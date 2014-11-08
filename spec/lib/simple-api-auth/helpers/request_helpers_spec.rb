@@ -3,7 +3,7 @@ describe SimpleApiAuth do
     include SimpleApiAuth::Helpers::Request
 
     describe '#normalize_headers' do
-      let(:raw_headers) { make_dummy_headers }
+      let(:raw_headers) { mock_headers }
       let(:headers) { normalize_headers(raw_headers) }
 
       it 'should normalize headers keys' do

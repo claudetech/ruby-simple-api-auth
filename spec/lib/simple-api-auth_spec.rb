@@ -6,4 +6,19 @@ describe SimpleApiAuth do
     end
     expect(SimpleApiAuth.config.request_keys[:headers]).to eq(:env)
   end
+
+  describe '#valid_signature?' do
+    let(:request) { mock_request }
+
+    it 'should fail with wrong request' do
+      result = SimpleApiAuth.valid_signature?(request, mock_secret_key)
+      expect(result).to be_falsy
+    end
+
+    it 'should succeed with correct signature' do
+      request.headers[:authorization] = "Signature: #{mock_signature}"
+      result = SimpleApiAuth.valid_signature?(request, mock_secret_key)
+      expect(result).to be_truthy
+    end
+  end
 end

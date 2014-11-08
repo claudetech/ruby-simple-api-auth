@@ -3,7 +3,7 @@ describe SimpleApiAuth do
     include SimpleApiAuth::Helpers::Request
     include SimpleApiAuth::Helpers::Auth
 
-    let(:headers) { normalize_headers(make_dummy_headers) }
+    let(:headers) { normalize_headers(mock_headers) }
     let(:request) { SimpleApiAuth::Request.create(rails_request) }
 
     describe '#extract_signature' do

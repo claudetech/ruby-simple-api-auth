@@ -6,7 +6,7 @@ module SimpleApiAuth
 
     def initialize(request, secret_key)
       self.request = SimpleApiAuth::Request.create(request)
-      self.signer = SimpleApiAuth.config.signer
+      self.signer = SimpleApiAuth.config.signer.new
       @secret_key = secret_key
     end
 

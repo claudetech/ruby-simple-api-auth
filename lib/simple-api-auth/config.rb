@@ -8,18 +8,22 @@ module SimpleApiAuth
     end
 
     def reset!
-      self.request_keys = {
+      self.request_keys = default_request_keys
+      self.allowed_methods = [:get, :post, :put, :patch, :delete]
+      self.required_headers = [:authorization, :x_saa_auth_time, :x_saa_key]
+      self.hasher = SimpleApiAuth::Hasher::SHA1
+      self.signer = SimpleApiAuth::Signer
+      self.request_timeout = 5
+    end
+
+    def default_request_keys
+      {
         headers: :headers,
         http_verb: :method,
         uri: :path,
         query_string: :query_string,
         body: :body
       }
-      self.allowed_methods = [:get, :post, :put, :patch, :delete]
-      self.required_headers = [:authorization, :x_saa_auth_time, :x_saa_key]
-      self.hasher = SimpleApiAuth::Hasher::SHA1
-      self.signer = SimpleApiAuth::Signer
-      self.request_timeout = 5
     end
   end
 end
