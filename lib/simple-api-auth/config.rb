@@ -2,6 +2,7 @@ module SimpleApiAuth
   class Config
     attr_accessor :request_keys, :allowed_methods
     attr_accessor :signer, :request_timeout, :required_headers, :hasher
+    attr_accessor :logger
 
     def initialize
       reset!
@@ -14,6 +15,7 @@ module SimpleApiAuth
       self.hasher = SimpleApiAuth::Hasher::SHA1
       self.signer = SimpleApiAuth::Signer
       self.request_timeout = 5
+      self.logger = nil
     end
 
     def default_request_keys

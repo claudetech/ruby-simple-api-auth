@@ -2,7 +2,7 @@ describe SimpleApiAuth do
   describe SimpleApiAuth::Request do
     include SimpleApiAuth::Helpers::Request
 
-    let(:base_request) { SimpleApiAuth::Request.new(rails_request) }
+    let(:base_request) { SimpleApiAuth::Request.create(rails_request) }
 
     def check_request(request)
       expect(request.headers).to eq(normalize_headers(mock_headers))
@@ -10,7 +10,7 @@ describe SimpleApiAuth do
     end
 
     describe '#initialize' do
-      let(:request) { SimpleApiAuth::Request.new(rails_request) }
+      let(:request) { SimpleApiAuth::Request.create(rails_request) }
 
       it 'should set headers and http verb' do
         check_request(request)

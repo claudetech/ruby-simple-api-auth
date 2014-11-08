@@ -4,9 +4,9 @@ module SimpleApiAuth
 
     attr_accessor :headers, :http_verb, :query_string, :uri, :body
 
-    def initialize(request)
-      SimpleApiAuth.config.request_keys.each do |k, v|
-        send("#{k}=", request.send(v))
+    def initialize(options = {})
+      options.each do |k, v|
+        send("#{k}=", v)
       end
       self.headers = normalize_headers(headers)
       self.http_verb = normalize(http_verb)
@@ -22,7 +22,11 @@ module SimpleApiAuth
       if request.is_a?(Request)
         request
       else
-        Request.new(request)
+        options = {}
+        SimpleApiAuth.config.request_keys.each do |k, v|
+          options[k] = request.send(v)
+        end
+        Request.new(options)
       end
     end
   end

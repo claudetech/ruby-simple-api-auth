@@ -15,4 +15,8 @@ module SimpleApiAuth
   def self.configure
     yield config
   end
+
+  def self.log(severity, message = nil, progname = nil, &block)
+    config.logger.log(severity, message, progname, &block) unless config.logger.nil?
+  end
 end

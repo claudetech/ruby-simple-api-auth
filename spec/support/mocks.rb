@@ -32,7 +32,7 @@ module SpecHelpers
 
     def mock_signature
       date = mock_request.time.strftime('%Y%m%d')
-      Digest.hexencode("ssa#{mock_secret_key}\n#{date}\nssa_request")
+      Digest.hexencode("ssa#{mock_secret_key}\n#{date}\nssa_request\n#{mock_string_to_sign}")
     end
 
     def setup_dummy_signer

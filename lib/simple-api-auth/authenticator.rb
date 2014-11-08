@@ -13,6 +13,8 @@ module SimpleApiAuth
     def valid_signature?
       return false if !check_data(request) || too_old?(request)
       signed_request = signer.sign(request, @secret_key)
+      SimpleApiAuth.log(Logger::DEBUG, "Signed request: #{signed_request}")
+      SimpleApiAuth.log(Logger::DEBUG, "User signature: #{user_signature}")
       secure_equals?(signed_request, user_signature, @secret_key)
     end
 
