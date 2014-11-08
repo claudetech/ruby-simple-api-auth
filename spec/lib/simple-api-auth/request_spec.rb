@@ -2,6 +2,8 @@ describe SimpleApiAuth do
   describe SimpleApiAuth::Request do
     include SimpleApiAuth::Helpers::Request
 
+    let(:base_request) { SimpleApiAuth::Request.new(rails_request) }
+
     def check_request(request)
       expect(request.headers).to eq(normalize_headers(make_dummy_headers))
       expect(request.http_verb).to eq(:get)
@@ -29,8 +31,18 @@ describe SimpleApiAuth do
       end
 
       it 'should not modify already normalized requests' do
-        request = SimpleApiAuth::Request.new(rails_request)
-        expect(SimpleApiAuth::Request.create(request).object_id).to eq(request.object_id)
+        expect(SimpleApiAuth::Request.create(base_request).object_id).to eq(base_request.object_id)
+      end
+    end
+
+    describe '#time' do
+      it 'should return request time' do
+        expect(base_request.time).to eq(now)
+      end
+
+      it 'should return nil on wrong time' do
+        base_request.headers[:x_saa_auth_time] = 'foobar'
+        expect(base_request.time).to be_nil
       end
     end
   end
