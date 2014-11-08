@@ -4,9 +4,10 @@ module SimpleApiAuth
 
     attr_accessor :request, :signer
 
-    def initialize(request, secret_key)
+    def initialize(request, secret_key, options = {})
       self.request = SimpleApiAuth::Request.create(request)
       self.signer = SimpleApiAuth.config.signer.new
+      @options = options
       @secret_key = secret_key
     end
 
@@ -29,8 +30,8 @@ module SimpleApiAuth
     end
   end
 
-  def self.valid_signature?(request, secret_key)
-    authenticator = Authenticator.new(request, secret_key)
+  def self.valid_signature?(request, secret_key, options = {})
+    authenticator = Authenticator.new(request, secret_key, options)
     authenticator.valid_signature?
   end
 end

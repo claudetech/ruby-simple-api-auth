@@ -1,4 +1,4 @@
-# simple-api-auth (In development)
+# simple-api-auth [![Build Status](https://travis-ci.org/claudetech/ruby-simple-api-auth.svg?branch=master)](https://travis-ci.org/claudetech/ruby-simple-api-auth) [![Coverage Status](https://coveralls.io/repos/claudetech/ruby-simple-api-auth/badge.png?branch=master)](https://coveralls.io/r/claudetech/ruby-simple-api-auth?branch=master)
 
 This gem provides a very basic token based authentication
 to use for API.

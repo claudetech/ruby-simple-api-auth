@@ -1,7 +1,7 @@
+require 'coveralls'
 require 'codeclimate-test-reporter'
-# require 'coveralls'
+Coveralls.wear!
 CodeClimate::TestReporter.start
-# Coveralls.wear!
 
 $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
 

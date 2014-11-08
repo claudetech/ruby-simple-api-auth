@@ -7,18 +7,26 @@ module SimpleApiAuth
       end
 
       def required_headers
-        SimpleApiAuth.config.required_headers
+        options[:required_headers] || SimpleApiAuth.config.required_headers
       end
 
       def request_timeout
-        SimpleApiAuth.config.request_timeout * 60
+        (options[:request_timeout] || SimpleApiAuth.config.request_timeout) * 60
+      end
+
+      def allowed_methods
+        options[:allowed_methods] || SimpleApiAuth.config.allowed_methods
+      end
+
+      def options
+        @options || {}
       end
 
       def check_data(request)
         required_headers.each do |k, _|
           return false unless request.headers.key?(k)
         end
-        SimpleApiAuth.config.allowed_methods.include?(request.http_verb)
+        allowed_methods.include?(request.http_verb)
       end
 
       def too_old?(request)
