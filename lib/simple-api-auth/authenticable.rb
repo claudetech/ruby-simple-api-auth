@@ -1,17 +1,29 @@
 module SimpleApiAuth
   module Authenticable
+    def api_authenticable?
+      false
+    end
+
     def acts_as_api_authenticable(options = {})
-      if respond_to?(:ssa_authenticate)
+      if api_authenticable?
         self.ssa_options = ssa_options.merge(options)
       else
-        cattr_accessor :ssa_options
-        options = SimpleApiAuth.config.model_defaults.merge(options)
-        self.ssa_options = options
         extend ClassMethods
+        include InstanceMethods
+        self.ssa_options = SimpleApiAuth.config.make_model_options(options)
+        ssa_options[:auto_generate].each do |field|
+          send(:after_initialize, "assign_#{field}")
+        end
       end
     end
 
     module ClassMethods
+      attr_accessor :ssa_options
+
+      def api_authenticable?
+        true
+      end
+
       def ssa_authenticate(request)
         request = SimpleApiAuth::Request.create(request)
         entity = ssa_find(request)
@@ -24,6 +36,31 @@ module SimpleApiAuth
       def ssa_find(request)
         key = SimpleApiAuth.extract_key(request)
         find_by(ssa_options[:ssa_key] => key)
+      end
+
+      def generate_ssa_key(options = {})
+        length = options[:length] || (Math.log(count + 1, 64) + 5)
+        loop do
+          key = SecureRandom.urlsafe_base64(length)
+          break key unless exists?(ssa_options[:ssa_key] => key)
+        end
+      end
+
+      def generate_ssa_secret(options = {})
+        length = options[:length] || 64
+        SecureRandom.urlsafe_base64(length)
+      end
+    end
+
+    module InstanceMethods
+      def assign_ssa_key(options = {})
+        key_name = self.class.ssa_options[:ssa_key]
+        send("#{key_name}=", self.class.generate_ssa_key(options))
+      end
+
+      def assign_ssa_secret(options = {})
+        key_name = self.class.ssa_options[:ssa_secret]
+        send("#{key_name}=", self.class.generate_ssa_secret(options))
       end
     end
   end

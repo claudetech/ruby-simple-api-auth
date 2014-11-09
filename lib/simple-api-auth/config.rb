@@ -20,6 +20,16 @@ module SimpleApiAuth
       self.logger = nil
     end
 
+    def make_model_options(options)
+      options = model_defaults.merge(options)
+      if options[:auto_generate].is_a?(Symbol)
+        options[:auto_generate] = [options[:auto_generate]]
+      elsif !options[:auto_generate].is_a?(Array)
+        options[:auto_generate] = options[:auto_generate] ? [:ssa_key, :ssa_secret] : []
+      end
+      options
+    end
+
     private
 
     def default_request_keys
@@ -43,7 +53,8 @@ module SimpleApiAuth
     def model_default_values
       {
         ssa_key: :ssa_key,
-        ssa_secret: :ssa_secret
+        ssa_secret: :ssa_secret,
+        auto_generate: []
       }
     end
   end

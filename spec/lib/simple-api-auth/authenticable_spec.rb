@@ -50,20 +50,57 @@ describe SimpleApiAuth do
         end
 
         it 'should return false when the secret key does not match' do
-          AuthenticableModel.create(ssa_key: 'user_personal_key', ssa_secret: 'something else')
+          clazz.create(ssa_key: 'user_personal_key', ssa_secret: 'something else')
           expect(subject).to be false
         end
 
         it 'should return the resource when signature matches' do
-          entity = AuthenticableModel.create(
+          entity = clazz.create(
             ssa_key: 'user_personal_key', ssa_secret: 'ultra_secret_key')
           expect(subject.id).to eq(entity.id)
         end
       end
+
+      { 'generate_ssa_key' => 5, 'generate_ssa_secret' => 64 }.each do |method, value|
+        describe "##{method}" do
+          let(:options) { {} }
+          let(:key) { clazz.send(method.to_sym, options) }
+          it 'should generate a long enough key' do
+            expect(key.length).to be > value
+          end
+
+          it 'should use options length' do
+            options[:length] = 1
+            expect(key.length).to be < 3
+          end
+        end
+      end
+
+      describe 'hooks' do
+        subject { AuthenticableModelWithHooks.new }
+        its(:ssa_key) { should_not be_nil }
+        its(:ssa_secret) { should_not be_nil }
+      end
     end
 
     describe 'instance extension' do
-      subject { AuthenticableModel.new }
+      subject(:model) { AuthenticableModel.new }
+
+      it { should respond_to(:assign_ssa_key) }
+      it { should respond_to(:assign_ssa_secret) }
+      its(:ssa_key) { should be_nil }
+      its(:ssa_secret) { should be_nil }
+
+      [:assign_ssa_key, :assign_ssa_secret].each do |method|
+        field_name = method.to_s.gsub('assign_', '')
+        describe "##{method}" do
+          it "should assign #{field_name}" do
+            expect(model.send(field_name)).to be_nil
+            model.send(method)
+            expect(model.send(field_name)).not_to be_nil
+          end
+        end
+      end
     end
   end
 end

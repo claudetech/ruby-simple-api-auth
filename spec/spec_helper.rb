@@ -14,6 +14,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
 require 'active_record'
 require 'database_cleaner'
 require 'simple-api-auth'
+require 'rspec/its'
 
 support_glob = File.expand_path('support/**/*.rb', File.dirname(__FILE__))
 Dir[support_glob].each { |f| require f }
