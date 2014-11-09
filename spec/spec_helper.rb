@@ -11,6 +11,8 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 
 $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
 
+require 'active_record'
+require 'database_cleaner'
 require 'simple-api-auth'
 
 support_glob = File.expand_path('support/**/*.rb', File.dirname(__FILE__))
@@ -24,12 +26,5 @@ RSpec.configure do |config|
     allow(Time).to receive(:now) { Time.utc(2014, 11, 8, 0, 7) }
     SimpleApiAuth.config.reset!
     SimpleApiAuth.config.hasher = SpecHelpers::Auth::DummyHasher
-  end
-end
-
-class String
-  def unindent
-    first_line_spaces = self[/\A\s*/]
-    gsub(/^#{first_line_spaces}/, '')
   end
 end

@@ -21,17 +21,31 @@ describe SimpleApiAuth do
     end
   end
 
+  describe '#extract_key' do
+    let(:request) { mock_request }
+    subject { SimpleApiAuth.extract_key(request) }
+
+    it 'should extract correct key' do
+      expect(subject).to eq('user_personal_key')
+    end
+
+    it 'should work with custom headers' do
+      SimpleApiAuth.config.header_keys[:key] = :key
+      request.headers[:key] = request.headers.delete(:x_saa_key)
+      expect(subject).to eq('user_personal_key')
+    end
+  end
+
   describe '#valid_signature?' do
     let(:request) { mock_request }
+    let(:result) { SimpleApiAuth.valid_signature?(request, mock_secret_key) }
 
     it 'should fail with wrong request' do
-      result = SimpleApiAuth.valid_signature?(request, mock_secret_key)
       expect(result).to be_falsy
     end
 
     it 'should succeed with correct signature' do
       request.headers[:authorization] = "Signature: #{mock_signature}"
-      result = SimpleApiAuth.valid_signature?(request, mock_secret_key)
       expect(result).to be_truthy
     end
 

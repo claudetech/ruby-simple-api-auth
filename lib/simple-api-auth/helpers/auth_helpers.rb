@@ -2,7 +2,8 @@ module SimpleApiAuth
   module Helpers
     module Auth
       def extract_signature(headers)
-        match = /Signature: (.+)/.match(headers[:authorization])
+        header_key = SimpleApiAuth.config.header_keys[:authorization]
+        match = /Signature: (.+)/.match(headers[header_key])
         match && match[1]
       end
 

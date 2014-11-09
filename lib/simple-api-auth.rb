@@ -20,3 +20,5 @@ module SimpleApiAuth
     config.logger.log(severity, message, progname, &block) unless config.logger.nil?
   end
 end
+
+ActiveRecord::Base.send(:extend, SimpleApiAuth::Authenticable) if defined?(ActiveRecord::Base)
