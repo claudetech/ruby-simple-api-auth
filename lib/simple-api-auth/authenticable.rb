@@ -54,13 +54,18 @@ module SimpleApiAuth
 
     module InstanceMethods
       def assign_ssa_key(options = {})
-        key_name = self.class.ssa_options[:ssa_key]
-        send("#{key_name}=", self.class.generate_ssa_key(options))
+        assign_ssa(:ssa_key, options)
       end
 
       def assign_ssa_secret(options = {})
-        key_name = self.class.ssa_options[:ssa_secret]
-        send("#{key_name}=", self.class.generate_ssa_secret(options))
+        assign_ssa(:ssa_secret, options)
+      end
+
+      private
+
+      def assign_ssa(field, options = {})
+        key_name = self.class.ssa_options[field]
+        send("#{key_name}=", self.class.send("generate_#{field}", options))
       end
     end
   end
