@@ -29,14 +29,4 @@ module SimpleApiAuth
       request.headers
     end
   end
-
-  def self.extract_key(request)
-    request = SimpleApiAuth::Request.create(request)
-    request.headers[SimpleApiAuth.config.header_keys[:key]]
-  end
-
-  def self.valid_signature?(request, secret_key, options = {})
-    authenticator = Authenticator.new(request, secret_key, options)
-    authenticator.valid_signature?
-  end
 end

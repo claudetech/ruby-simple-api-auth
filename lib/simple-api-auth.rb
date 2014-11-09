@@ -19,6 +19,16 @@ module SimpleApiAuth
   def self.log(severity, message = nil, progname = nil, &block)
     config.logger.log(severity, message, progname, &block) unless config.logger.nil?
   end
+
+  def self.extract_key(request)
+    request = SimpleApiAuth::Request.create(request)
+    request.headers[SimpleApiAuth.config.header_keys[:key]]
+  end
+
+  def self.valid_signature?(request, secret_key, options = {})
+    authenticator = Authenticator.new(request, secret_key, options)
+    authenticator.valid_signature?
+  end
 end
 
 ActiveRecord::Base.send(:extend, SimpleApiAuth::Authenticable) if defined?(ActiveRecord::Base)
