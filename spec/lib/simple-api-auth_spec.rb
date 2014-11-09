@@ -100,8 +100,8 @@ describe SimpleApiAuth do
       end
     end
 
-    describe '#sign' do
-      before(:each) { SimpleApiAuth.sign(request, secret_key) }
+    describe '#sign!' do
+      before(:each) { SimpleApiAuth.sign!(request, secret_key) }
       it 'should sign the current request' do
         expect(subject).to be_truthy
       end
