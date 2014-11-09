@@ -76,4 +76,24 @@ describe SimpleApiAuth do
       end
     end
   end
+
+  describe '#sign' do
+    let(:request) { mock_request }
+    let(:base_secret) { 'a_very_secret_key' }
+    let(:secret_key) { base_secret }
+    let(:signature) { SimpleApiAuth.sign(request, secret_key) }
+
+    it 'should return correct signature' do
+      request.headers[:authorization] = "Signature: #{signature}"
+      expect(SimpleApiAuth.valid_signature?(request, secret_key)).to be_truthy
+    end
+
+    context 'with a different key' do
+      let(:secret_key) { 'another cool key' }
+      it 'should not return the same signature' do
+        request.headers[:authorization] = "Signature: #{signature}"
+        expect(SimpleApiAuth.valid_signature?(request, base_secret)).to be_falsy
+      end
+    end
+  end
 end

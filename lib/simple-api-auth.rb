@@ -29,6 +29,11 @@ module SimpleApiAuth
     authenticator = Authenticator.new(request, secret_key, options)
     authenticator.valid_signature?
   end
+
+  def self.sign(request, secret_key, options = {})
+    signer = SimpleApiAuth.config.signer.new(options)
+    signer.sign(request, secret_key)
+  end
 end
 
 ActiveRecord::Base.send(:extend, SimpleApiAuth::Authenticable) if defined?(ActiveRecord::Base)
