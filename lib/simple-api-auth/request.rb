@@ -24,7 +24,7 @@ module SimpleApiAuth
         request
       else
         options = {}
-        SimpleApiAuth.config.request_keys.each do |k, v|
+        SimpleApiAuth.config.request_fields.each do |k, v|
           options[k] = request.send(v)
         end
         Request.new(options)

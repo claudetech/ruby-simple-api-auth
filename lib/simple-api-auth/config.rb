@@ -1,6 +1,6 @@
 module SimpleApiAuth
   class Config
-    attr_accessor :request_keys, :allowed_methods
+    attr_accessor :request_fields, :allowed_methods
     attr_accessor :signer, :request_timeout, :required_headers, :hasher
     attr_accessor :logger, :header_keys, :model_defaults
 
@@ -11,7 +11,7 @@ module SimpleApiAuth
     def reset!
       self.model_defaults = model_default_values
       self.header_keys = default_header_keys
-      self.request_keys = default_request_keys
+      self.request_fields = default_request_fields
       self.allowed_methods = [:get, :post, :put, :patch, :delete]
       self.required_headers = default_header_keys.values
       self.hasher = SimpleApiAuth::Hasher::SHA1
@@ -32,7 +32,7 @@ module SimpleApiAuth
 
     private
 
-    def default_request_keys
+    def default_request_fields
       {
         headers: :headers,
         http_verb: :method,

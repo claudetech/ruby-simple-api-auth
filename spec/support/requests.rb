@@ -35,8 +35,8 @@ module SpecHelpers
 
       def self.configure
         ::SimpleApiAuth.configure do |config|
-          config.request_keys[:headers] = :env
-          config.request_keys[:http_verb] = :request_method
+          config.request_fields[:headers] = :env
+          config.request_fields[:http_verb] = :request_method
         end
       end
     end

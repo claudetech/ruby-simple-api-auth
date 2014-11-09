@@ -37,7 +37,7 @@ module SimpleApiAuth
 
   def self.sign!(request, secret_key, options = {})
     signature = compute_signature(request, secret_key, options)
-    header_name = SimpleApiAuth.config.request_keys[:headers]
+    header_name = SimpleApiAuth.config.request_fields[:headers]
     authorization_key = SimpleApiAuth.config.header_keys[:authorization]
     request.send(header_name)[authorization_key] = "Signature: #{signature}"
     request

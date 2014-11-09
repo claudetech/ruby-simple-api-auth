@@ -3,13 +3,13 @@ describe SimpleApiAuth do
     let(:config) { SimpleApiAuth::Config.new }
 
     it 'should have default values' do
-      expect(config.request_keys[:headers]).to eq(:headers)
-      expect(config.request_keys[:http_verb]).to eq(:method)
+      expect(config.request_fields[:headers]).to eq(:headers)
+      expect(config.request_fields[:http_verb]).to eq(:method)
     end
 
     it 'should be mutable' do
-      config.request_keys[:headers] = :env
-      expect(config.request_keys[:headers]).to eq(:env)
+      config.request_fields[:headers] = :env
+      expect(config.request_fields[:headers]).to eq(:env)
     end
 
     describe 'make_model_options' do
