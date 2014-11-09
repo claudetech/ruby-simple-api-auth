@@ -10,7 +10,7 @@ rvm:
 notifications:
   email: false
   slack:
-    secure: dWunGMhRwSmsVhc/wJD0EDVH/PTLtzb1G+ZExj28gWCdZ7ojTgrFDUiAAqxli/FrtpQTUsX8K7eYjlQLPc5vmNCdUes8537r8vmPz7p6m97A5rehBsIWfgYZNKKA3hxvWAoCryOdUwbUsihSmpTmQTfRSH4SZfOmRPuRzzmrVFA=
+    secure: n7JigGAnMzisSryncblhmgh+/WoiOJJ3VoMiS6gYufJEjoiAByiOGKuMDYld/IfIZ9laD/XFx2l4aAl7QwCgae/EaKaZQeEoVSpIqacwsPNsQwqXf0IehgYv7/vykihYlFLu6eOCoqOXgDDWxP3Knned251MYzp8EcjNkUtZMrU=
 addons:
   code_climate:
     repo_token: 9bd643c8090c8ef179d2b7d20d41d2e4399c031f621efdb125c1dc2ca5d9e6cc
