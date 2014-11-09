@@ -101,9 +101,16 @@ describe SimpleApiAuth do
     end
 
     describe '#sign!' do
-      before(:each) { SimpleApiAuth.sign!(request, secret_key) }
       it 'should sign the current request' do
+        SimpleApiAuth.sign!(request, secret_key)
         expect(subject).to be_truthy
+      end
+
+      it 'should add time header' do
+        request.headers.delete :x_saa_auth_time
+        SimpleApiAuth.sign!(request, secret_key)
+        expect(subject).to be_truthy
+        expect(request.headers[:x_saa_auth_time]).not_to be_nil
       end
     end
   end

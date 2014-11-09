@@ -44,6 +44,11 @@ describe SimpleApiAuth do
         base_request.headers[:x_saa_auth_time] = 'foobar'
         expect(base_request.time).to be_nil
       end
+
+      it 'should return nil on empty time' do
+        base_request.headers.delete :x_saa_auth_time
+        expect(base_request.time).to be_nil
+      end
     end
   end
 end
