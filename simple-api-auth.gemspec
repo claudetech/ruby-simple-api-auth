@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Daniel Perez']
   spec.email         = ['daniel@claudetech.com']
   spec.summary       = 'Basic token based authentication for APIs'
-  spec.homepage      = 'https://github.com/claude-tech/ruby-simple-api-auth'
+  spec.homepage      = 'https://github.com/claudetech/ruby-simple-api-auth'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
