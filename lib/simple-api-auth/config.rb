@@ -1,6 +1,6 @@
 module SimpleApiAuth
   class Config
-    attr_accessor :request_fields, :allowed_methods
+    attr_accessor :request_fields, :allowed_methods, :request_normalizer
     attr_accessor :signer, :request_timeout, :required_headers, :hasher
     attr_accessor :logger, :header_keys, :model_defaults
 
@@ -9,6 +9,7 @@ module SimpleApiAuth
     end
 
     def reset!
+      self.request_normalizer = SimpleApiAuth::Helpers::RequestNormalizer
       self.model_defaults = model_default_values
       self.header_keys = default_header_keys
       self.request_fields = default_request_fields
@@ -44,9 +45,9 @@ module SimpleApiAuth
 
     def default_header_keys
       {
-        key: :x_saa_key,
-        time: :x_saa_auth_time,
-        authorization: :authorization
+        key: :http_x_saa_key,
+        time: :http_x_saa_auth_time,
+        authorization: :http_authorization
       }
     end
 

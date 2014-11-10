@@ -31,7 +31,7 @@ describe SimpleApiAuth do
 
     it 'should work with custom headers' do
       SimpleApiAuth.config.header_keys[:key] = :key
-      request.headers[:key] = request.headers.delete(:x_saa_key)
+      request.headers[:key] = request.headers.delete(:http_x_saa_key)
       expect(subject).to eq('user_personal_key')
     end
   end
@@ -45,7 +45,7 @@ describe SimpleApiAuth do
     end
 
     it 'should succeed with correct signature' do
-      request.headers[:authorization] = "Signature: #{mock_signature}"
+      request.headers[:http_authorization] = "Signature: #{mock_signature}"
       expect(result).to be_truthy
     end
 
@@ -60,9 +60,9 @@ describe SimpleApiAuth do
           query_string: 'foo=bar&bar=qux',
           body: StringIO.new('somerandombody'),
           headers: {
-            authorization: 'Signature: 7c171d095fd65b7078afd13a6b3bd4ecfe596552',
-            x_saa_auth_time: request_time.iso8601,
-            x_saa_key: 'wedontreallycarehere'
+            http_authorization: 'Signature: 7c171d095fd65b7078afd13a6b3bd4ecfe596552',
+            http_x_saa_auth_time: request_time.iso8601,
+            http_x_saa_key: 'wedontreallycarehere'
           }
         )
       end
@@ -87,14 +87,14 @@ describe SimpleApiAuth do
       let(:signature) { SimpleApiAuth.compute_signature(request, secret_key) }
 
       it 'should return correct signature' do
-        request.headers[:authorization] = "Signature: #{signature}"
+        request.headers[:http_authorization] = "Signature: #{signature}"
         expect(subject).to be_truthy
       end
 
       context 'with a different key' do
         let(:secret_key) { 'another cool key' }
         it 'should not return the same signature' do
-          request.headers[:authorization] = "Signature: #{signature}"
+          request.headers[:http_authorization] = "Signature: #{signature}"
           expect(SimpleApiAuth.valid_signature?(request, base_secret)).to be_falsy
         end
       end
@@ -107,10 +107,26 @@ describe SimpleApiAuth do
       end
 
       it 'should add time header' do
-        request.headers.delete :x_saa_auth_time
+        request.headers.delete 'HTTP_X_SAA_AUTH_TIME'
         SimpleApiAuth.sign!(request, secret_key)
         expect(subject).to be_truthy
-        expect(request.headers[:x_saa_auth_time]).not_to be_nil
+        expect(request.headers[:http_x_saa_auth_time]).not_to be_nil
+      end
+
+      describe 'with rails request' do
+        let(:request) { rails_request }
+
+        it 'should work' do
+          SimpleApiAuth.sign!(request, secret_key)
+          expect(subject).to be_truthy
+        end
+
+        it 'should add headers with prefix' do
+          request.headers.delete 'HTTP_X_SAA_AUTH_TIME'
+          SimpleApiAuth.sign!(request, secret_key)
+          expect(subject).to be_truthy
+          expect(request.headers['HTTP_X_SAA_AUTH_TIME']).not_to be_nil
+        end
       end
     end
   end

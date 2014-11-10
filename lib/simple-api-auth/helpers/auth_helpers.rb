@@ -25,16 +25,30 @@ module SimpleApiAuth
 
       def check_data(request)
         required_headers.each do |k, _|
-          return false unless request.headers.key?(k)
+          return log_and_fail(missing_header_message(k)) unless request.headers.key?(k)
         end
-        allowed_methods.include?(request.http_verb)
+        allowed_verb = allowed_methods.include?(request.http_verb)
+        return log_and_fail("verb #{request.http_verb} not allowed") unless allowed_verb
+        true
       end
 
-      def too_old?(request)
+      def missing_header_message(header_name)
+        available_headers = request.headers.keys.join(', ')
+        "missing header #{header_name}. available headers are: #{available_headers}"
+      end
+
+      def valid_time?(request)
         request_time = request.time
-        return false if request_time.nil?
+        return log_and_fail('request time not found') if request_time.nil?
         difference = Time.now - request_time
-        difference < 0 || difference > request_timeout
+        return log_and_fail('negative time') if difference < 0
+        return log_and_fail('request too old') if difference > request_timeout
+        true
+      end
+
+      def log_and_fail(message)
+        SimpleApiAuth.log(Logger::DEBUG, message)
+        false
       end
 
       def secure_equals?(m1, m2, key)

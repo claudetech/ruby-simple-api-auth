@@ -1,6 +1,5 @@
 describe SimpleApiAuth do
   describe SimpleApiAuth::Authenticator do
-    include SimpleApiAuth::Helpers::Request
 
     let(:dummy_headers) { mock_headers }
 
@@ -16,12 +15,12 @@ describe SimpleApiAuth do
 
         describe '#valid_signature?' do
           it 'should fail on missing header' do
-            dummy_headers.delete 'X-Saa-Key'
+            dummy_headers.delete 'HTTP_X_SAA_KEY'
             expect(authenticator.valid_signature?).to be_falsy
           end
 
           it 'should fail on outdated request' do
-            dummy_headers[:x_saa_auth_time] = outdated_time.iso8601
+            dummy_headers[:http_x_saa_auth_time] = outdated_time.iso8601
             expect(authenticator.valid_signature?).to be_falsy
           end
 

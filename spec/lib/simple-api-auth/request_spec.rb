@@ -1,11 +1,11 @@
 describe SimpleApiAuth do
   describe SimpleApiAuth::Request do
-    include SimpleApiAuth::Helpers::Request
 
     let(:base_request) { SimpleApiAuth::Request.create(rails_request) }
+    let(:normalizer) { SimpleApiAuth::Helpers::RequestNormalizer.new }
 
     def check_request(request)
-      expect(request.headers).to eq(normalize_headers(mock_headers))
+      expect(request.headers).to eq(normalizer.normalize_headers(mock_headers))
       expect(request.http_verb).to eq(:get)
     end
 
@@ -41,13 +41,27 @@ describe SimpleApiAuth do
       end
 
       it 'should return nil on wrong time' do
-        base_request.headers[:x_saa_auth_time] = 'foobar'
+        base_request.headers[:http_x_saa_auth_time] = 'foobar'
         expect(base_request.time).to be_nil
       end
 
       it 'should return nil on empty time' do
-        base_request.headers.delete :x_saa_auth_time
+        base_request.headers.delete :http_x_saa_auth_time
         expect(base_request.time).to be_nil
+      end
+    end
+
+    describe '#add_header' do
+      let(:base_request) { rails_request }
+      let(:request) { SimpleApiAuth::Request.create(base_request) }
+      before(:each) { request.add_header(:http_foo_bar, 'foobar') }
+
+      it 'should add header to request' do
+        expect(request.headers[:http_foo_bar]).to eq('foobar')
+      end
+
+      it 'should add header to base request' do
+        expect(base_request.headers['HTTP_FOO_BAR']).to eq('foobar')
       end
     end
   end

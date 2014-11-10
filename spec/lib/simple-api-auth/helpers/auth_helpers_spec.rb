@@ -1,9 +1,9 @@
 describe SimpleApiAuth do
   describe SimpleApiAuth::Helpers::Auth do
-    include SimpleApiAuth::Helpers::Request
     include SimpleApiAuth::Helpers::Auth
 
-    let(:headers) { normalize_headers(mock_headers) }
+    let(:normalizer) { SimpleApiAuth::Helpers::RequestNormalizer.new }
+    let(:headers) { normalizer.normalize_headers(mock_headers) }
     let(:request) { SimpleApiAuth::Request.create(rails_request) }
 
     describe '#extract_signature' do
@@ -12,7 +12,7 @@ describe SimpleApiAuth do
       end
 
       it 'should return nil otherwise' do
-        headers[:authorization] = 'Signatur: foobar'
+        headers[:http_authorization] = 'Signatur: foobar'
         expect(extract_signature(headers)).to be_nil
       end
     end
@@ -32,19 +32,19 @@ describe SimpleApiAuth do
       end
 
       it 'should fail when header is missing' do
-        request.headers.delete :authorization
+        request.headers.delete :http_authorization
         expect(check_data(request)).to be_falsy
       end
     end
 
-    describe '#too_old?' do
+    describe '#valid_time?' do
       it 'should allow recent enough requests' do
-        expect(too_old?(request)).to be_falsy
+        expect(valid_time?(request)).to be_truthy
       end
 
       it 'should reject old requests' do
-        request.headers[:x_saa_auth_time] = Time.new(2014, 11, 8).iso8601
-        expect(too_old?(request)).to be_truthy
+        request.headers[:http_x_saa_auth_time] = Time.new(2014, 11, 8).iso8601
+        expect(valid_time?(request)).to be_falsy
       end
     end
 

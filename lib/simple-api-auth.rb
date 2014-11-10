@@ -37,12 +37,11 @@ module SimpleApiAuth
   end
 
   def self.sign!(request, secret_key, options = {})
-    header_name = SimpleApiAuth.config.request_fields[:headers]
-    request.send(header_name)[SimpleApiAuth.config.header_keys[:time]] = Time.now.utc.iso8601
+    request = SimpleApiAuth::Request.create(request)
+    request.add_header(SimpleApiAuth.config.header_keys[:time], Time.now.utc.iso8601)
     signature = compute_signature(request, secret_key, options)
-    authorization_key = SimpleApiAuth.config.header_keys[:authorization]
-    request.send(header_name)[authorization_key] = "Signature: #{signature}"
-    request
+    request.add_header(SimpleApiAuth.config.header_keys[:authorization], "Signature: #{signature}")
+    request.original
   end
 end
 

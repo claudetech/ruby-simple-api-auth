@@ -14,9 +14,9 @@ module SpecHelpers
 
     def mock_headers
       {
-        'Authorization' => 'Signature: dummy_signature',
-        'X-Saa-Auth-Time' => request_time.iso8601,
-        'X-Saa-Key' => 'user_personal_key'
+        'HTTP_AUTHORIZATION' => 'Signature: dummy_signature',
+        'HTTP_X_SAA_AUTH_TIME' => request_time.iso8601,
+        'HTTP_X_SAA_KEY' => 'user_personal_key'
       }
     end
 
@@ -32,7 +32,7 @@ module SpecHelpers
     end
 
     def mock_string_to_sign
-      mock_headers['X-Saa-Auth-Time'] + "\n" + mock_hashed_request
+      mock_headers['HTTP_X_SAA_AUTH_TIME'] + "\n" + mock_hashed_request
     end
 
     def mock_signature

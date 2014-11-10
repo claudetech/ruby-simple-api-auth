@@ -40,7 +40,7 @@ describe SimpleApiAuth do
       describe '#ssa_authenticate' do
         let(:request) { mock_request }
         before(:each) do
-          request.headers[:authorization] = "Signature: #{mock_signature}"
+          request.headers[:http_authorization] = "Signature: #{mock_signature}"
         end
 
         subject { clazz.ssa_authenticate(request) }
