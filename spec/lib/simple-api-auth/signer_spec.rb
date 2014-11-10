@@ -29,8 +29,15 @@ describe SimpleApiAuth do
 
     describe '#sign' do
       let(:secret_key) { 'ultra_secret_key' }
+      subject { signer.sign(request, secret_key) }
+
       it 'should generate correct signature' do
-        expect(signer.sign(request, secret_key)).to eq(mock_signature)
+        expect(subject).to eq(mock_signature)
+      end
+
+      it 'should fail when time is not present' do
+        request.headers.delete :http_x_saa_auth_time
+        expect { subject }.to raise_error(SimpleApiAuth::SigningError)
       end
     end
   end

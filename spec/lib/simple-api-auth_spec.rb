@@ -30,7 +30,7 @@ describe SimpleApiAuth do
     end
 
     it 'should work with custom headers' do
-      SimpleApiAuth.config.header_keys[:key] = :key
+      SimpleApiAuth.config.header_keys[:saa_key] = :key
       request.headers[:key] = request.headers.delete(:http_x_saa_key)
       expect(subject).to eq('user_personal_key')
     end
@@ -60,7 +60,7 @@ describe SimpleApiAuth do
           query_string: 'foo=bar&bar=qux',
           body: StringIO.new('somerandombody'),
           headers: {
-            http_authorization: 'Signature: 7c171d095fd65b7078afd13a6b3bd4ecfe596552',
+            http_authorization: 'Signature: 6990ae83450457f6e1ca4a64b078751b12e8d429',
             http_x_saa_auth_time: request_time.iso8601,
             http_x_saa_key: 'wedontreallycarehere'
           }

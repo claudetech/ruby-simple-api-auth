@@ -26,7 +26,7 @@ module SimpleApiAuth
       if options[:auto_generate].is_a?(Symbol)
         options[:auto_generate] = [options[:auto_generate]]
       elsif !options[:auto_generate].is_a?(Array)
-        options[:auto_generate] = options[:auto_generate] ? [:ssa_key, :ssa_secret] : []
+        options[:auto_generate] = options[:auto_generate] ? [:saa_key, :saa_secret] : []
       end
       options
     end
@@ -45,16 +45,16 @@ module SimpleApiAuth
 
     def default_header_keys
       {
-        key: :http_x_saa_key,
-        time: :http_x_saa_auth_time,
+        saa_key: :http_x_saa_key,
+        saa_auth_time: :http_x_saa_auth_time,
         authorization: :http_authorization
       }
     end
 
     def model_default_values
       {
-        ssa_key: :ssa_key,
-        ssa_secret: :ssa_secret,
+        saa_key: :saa_key,
+        saa_secret: :saa_secret,
         auto_generate: []
       }
     end

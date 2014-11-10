@@ -36,13 +36,13 @@ class User < ActiveRecord::Base
 end
 ```
 
-you will need to have `ssa_key` and `ssa_secret` defined as strings
+you will need to have `saa_key` and `saa_secret` defined as strings
 in your database for this to work. If you want to change the columns name,
 you can pass them in option.
 
 ```ruby
 class User < ActiveRecord::Base
-  acts_as_api_authenticable ssa_key: :resource_key_field, ssa_secret: :secret_token
+  acts_as_api_authenticable saa_key: :resource_key_field, saa_secret: :secret_token
 end
 ```
 
@@ -51,14 +51,14 @@ to generate.
 
 ```ruby
 class User < ActiveRecord::Base
-  # this will generate a after_initialize to assign `ssa_key`
-  acts_as_api_authenticable auto_generate: :ssa_key
-  # this will generate a after_initialize for both `ssa_key` and `ssa_secret`
+  # this will generate a after_initialize to assign `saa_key`
+  acts_as_api_authenticable auto_generate: :saa_key
+  # this will generate a after_initialize for both `saa_key` and `saa_secret`
   acts_as_api_authenticable auto_generate: true
 end
 ```
 
-Note that the keys for autogenerate should be `:ssa_key` and `:ssa_secret` even if you change the key column name.
+Note that the keys for autogenerate should be `:saa_key` and `:saa_secret` even if you change the key column name.
 
 You can then use
 
@@ -73,8 +73,8 @@ this will return the user if the request is valid, or `nil` otherwise.
 This gem can easily used without `ActiveRecord`.
 
 ```ruby
-ssa_key = SimpleApiAuth.extract_key(request)
-secret_key = your_logic_to_get_secret_key(ssa_key)
+saa_key = SimpleApiAuth.extract_key(request)
+secret_key = your_logic_to_get_secret_key(saa_key)
 valid = SimpleApiAuth.valid_signature?(request, secret_key)
 ```
 
@@ -85,7 +85,7 @@ The library accepts the following configurations
 ```ruby
 SimpleApiAuth.configure do |config|
     # values used as default with `acts_as_api_authenticable`
-    config.model_defaults = { ssa_key: :ssa_key, ssa_secret: :ssa_secret, auto_generate: false }
+    config.model_defaults = { saa_key: :saa_key, saa_secret: :saa_secret, auto_generate: false }
 
     # the normalized keys for the HTTP headers
     config.header_keys = { key: :x_saa_key, time: :x_saa_auth_time, authorization: :authorization

@@ -11,7 +11,7 @@ module SimpleApiAuth
     end
 
     def time
-      header_key = SimpleApiAuth.config.header_keys[:time]
+      header_key = SimpleApiAuth.config.header_keys[:saa_auth_time]
       Time.parse(headers[header_key])
     rescue ArgumentError, TypeError
       nil

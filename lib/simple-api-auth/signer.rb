@@ -8,7 +8,9 @@ module SimpleApiAuth
     end
 
     def sign(request, secret_key)
-      signing_key = make_singing_key(request, secret_key)
+      fail SigningError, 'time header is not present' if request.time.nil?
+
+      signing_key = make_signing_key(request, secret_key)
       SimpleApiAuth.log(Logger::DEBUG, "Signing key(hex): #{Digest.hexencode(signing_key)}")
 
       string_to_sign = make_string_to_sign(request)
@@ -35,10 +37,10 @@ module SimpleApiAuth
 
     private
 
-    def make_singing_key(request, secret_key)
+    def make_signing_key(request, secret_key)
       date = request.time.strftime('%Y%m%d')
-      hashed_date = hasher.hmac('ssa' + secret_key, date)
-      hasher.hmac(hashed_date, 'ssa_request')
+      hashed_date = hasher.hmac('saa' + secret_key, date)
+      hasher.hmac(hashed_date, 'saa_request')
     end
 
     def make_canonical_request(request)

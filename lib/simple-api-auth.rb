@@ -22,7 +22,7 @@ module SimpleApiAuth
 
   def self.extract_key(request)
     request = SimpleApiAuth::Request.create(request)
-    request.headers[SimpleApiAuth.config.header_keys[:key]]
+    request.headers[SimpleApiAuth.config.header_keys[:saa_key]]
   end
 
   def self.valid_signature?(request, secret_key, options = {})
@@ -38,7 +38,7 @@ module SimpleApiAuth
 
   def self.sign!(request, secret_key, options = {})
     request = SimpleApiAuth::Request.create(request)
-    request.add_header(SimpleApiAuth.config.header_keys[:time], Time.now.utc.iso8601)
+    request.add_header(SimpleApiAuth.config.header_keys[:saa_auth_time], Time.now.utc.iso8601)
     signature = compute_signature(request, secret_key, options)
     request.add_header(SimpleApiAuth.config.header_keys[:authorization], "Signature: #{signature}")
     request.original

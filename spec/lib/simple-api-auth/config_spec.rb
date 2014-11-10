@@ -13,24 +13,24 @@ describe SimpleApiAuth do
     end
 
     describe 'make_model_options' do
-      let(:model_options) { { ssa_key: :foobar } }
+      let(:model_options) { { saa_key: :foobar } }
       subject(:options) { config.make_model_options(model_options) }
 
       it 'should merge options' do
-        expect(options[:ssa_key]).to eq(:foobar)
-        expect(options[:ssa_secret]).to eq(:ssa_secret)
+        expect(options[:saa_key]).to eq(:foobar)
+        expect(options[:saa_secret]).to eq(:saa_secret)
         expect(options[:auto_generate]).to eq([])
       end
 
       describe 'auto_generate configuration' do
         it 'should handle symbol' do
-          model_options[:auto_generate] = :ssa_key
-          expect(options[:auto_generate]).to eq([:ssa_key])
+          model_options[:auto_generate] = :saa_key
+          expect(options[:auto_generate]).to eq([:saa_key])
         end
 
         it 'should handle true' do
           model_options[:auto_generate] = true
-          expect(options[:auto_generate]).to eq([:ssa_key, :ssa_secret])
+          expect(options[:auto_generate]).to eq([:saa_key, :saa_secret])
         end
 
         it 'should handle false' do
@@ -39,8 +39,8 @@ describe SimpleApiAuth do
         end
 
         it 'should handle arrays' do
-          model_options[:auto_generate] = [:ssa_secret]
-          expect(options[:auto_generate]).to eq([:ssa_secret])
+          model_options[:auto_generate] = [:saa_secret]
+          expect(options[:auto_generate]).to eq([:saa_secret])
         end
       end
     end
