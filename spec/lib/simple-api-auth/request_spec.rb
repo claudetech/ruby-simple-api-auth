@@ -10,10 +10,16 @@ describe SimpleApiAuth do
     end
 
     describe '#initialize' do
-      let(:request) { SimpleApiAuth::Request.create(rails_request) }
+      let(:rails_req) { rails_request }
+      let(:request) { SimpleApiAuth::Request.create(rails_req) }
 
       it 'should set headers and http verb' do
         check_request(request)
+      end
+
+      it 'should work with added headers' do
+        rails_req.headers['RANDOM_HEADER'] = 'foobar'
+        expect(request.headers).to include(:random_header)
       end
     end
 
