@@ -54,6 +54,7 @@ class User < ActiveRecord::Base
   # this will generate a after_initialize to assign `saa_key`
   acts_as_api_authenticable auto_generate: :saa_key
   # this will generate a after_initialize for both `saa_key` and `saa_secret`
+  # not that this will only work for new records
   acts_as_api_authenticable auto_generate: true
 end
 ```
@@ -84,6 +85,11 @@ The library accepts the following configurations
 
 ```ruby
 SimpleApiAuth.configure do |config|
+    # class used to transform headers key to :underscored_symbols and back
+    # the provided normalizer works for Rack requests
+    # override for other types of requests
+    request_normalizer = SimpleApiAuth::Helpers::RequestNormalizer
+
     # values used as default with `acts_as_api_authenticable`
     config.model_defaults = { saa_key: :saa_key, saa_secret: :saa_secret, auto_generate: false }
 
@@ -153,6 +159,12 @@ or directly sign the request with
 
 ```ruby
 SimpleApiAuth.sign!(request, secret_key)
+```
+
+With `ActiveRecord`, it can also be used the following way.
+
+```ruby
+my_model.saa_sign!(request)
 ```
 
 A JS client, with an AngularJS module intregrated with the `$http` service
