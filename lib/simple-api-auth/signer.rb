@@ -3,8 +3,8 @@ module SimpleApiAuth
     attr_accessor :hasher
 
     def initialize(options = {})
-      hahser_class = options[:hasher] || SimpleApiAuth.config.hasher
-      self.hasher = hahser_class.new
+      hasher_class = options[:hasher] || SimpleApiAuth.config.hasher
+      self.hasher = hasher_class.new
     end
 
     def sign(request, secret_key)
